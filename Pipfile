@@ -1,0 +1,30 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "~=4.2"
+djangorestframework = "~=3.14"
+django-storages = "*"
+factory-boy = "*"
+psycopg2 = "*"
+sentry-sdk = "*"
+gunicorn = "*"
+uvicorn = "*"
+uritemplate = "*"
+pyyaml = "*"
+django-cors-headers = "*"
+django-celery-beat = "*"
+celery = {extras = ["redis"], version = "*"}
+flake8 = "*"
+
+[dev-packages]
+pylint = "*"
+pycodestyle = "*"
+mypy = "*"
+prospector = "*"
+pylint-django = "*"
+
+[requires]
+python_version = "3.9"

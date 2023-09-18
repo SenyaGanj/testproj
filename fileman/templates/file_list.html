@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Create an account{% endblock %}
+
+{% block content %}
+    <h1>Список файлов</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Имя файла</th>
+                <th scope="col">Последний статус</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for file in file_list %}
+                <tr>
+                    <th scope="row">{{ file.id }}</th>
+                    <td><a href="{% url 'edit_file' file.id %}">{{ file.file.name }}</a></td>
+                    <td>{{ file.last_log }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'create_file' %}">Добавить файл</a>
+{% endblock %}
