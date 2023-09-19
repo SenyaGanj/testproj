@@ -16,16 +16,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf.urls import include
+from rest_framework.routers import SimpleRouter
 from accounts.vews import RegisterView, LoginView
-from fileman.views import FileListView, CreateFileView
-# from rest_framework.routers import DefaultRouter
-#
-# v1_api = DefaultRouter()
+from fileman.views import FileListView, CreateFileView, UpdateFileView, DetailFileResultView
+from fileman.api.v1.file import FileViewSet
+
+router = SimpleRouter()
+router.register('files', FileViewSet, basename='file_api')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('register/', RegisterView.as_view()),
+    path('register/', RegisterView.as_view(), name='register'),
     path('login/', LoginView.as_view(), name='login'),
     path('', FileListView.as_view(), name='file_list'),
     path('new/', CreateFileView.as_view(), name='create_file'),
+    path('<pk>/', UpdateFileView.as_view(), name='file_detail'),
+    path('result/<pk>/', DetailFileResultView.as_view(), name='file_result'),
+    path('api/v1/', include(router.urls)),
 ]

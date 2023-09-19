@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>File {{ file.file.name }}</h1>
+    <form action="" method="post" enctype="multipart/form-data">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <input type="submit" class="btn btn-primary" value="Reload file">
+    </form>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Created at</th>
+                <th scope="col">Updated at</th>
+                <th scope="col">Status</th>
+                <th scope="col">Report</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in file.logs.all %}
+                <tr>
+                    <th scope="row">{{ log.id }}</th>
+                    <td>{{ log.created }}</td>
+                    <td>{{ log.updated }}</td>
+                    <td>{{ log.status }}</td>
+                    <td>
+                        {% if log.result %}
+                            <a href="{% url 'file_result' log.id %}">Check report</a>
+                        {% else %}
+                            --
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

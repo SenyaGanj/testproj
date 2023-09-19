@@ -1,6 +1,7 @@
 from django.views import View
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
+from django.urls import reverse_lazy
 from .forms import RegisterForm, LoginForm
 
 
@@ -38,4 +39,4 @@ class LoginView(View):
             return render(request, 'login.html', {'login_form': login_form})
 
         login(request, user)
-        return render(request, 'register_done.html', {'new_user': login_form})
+        return redirect(reverse_lazy('file_list'))

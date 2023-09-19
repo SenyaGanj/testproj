@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Result for {{ log.file.file.name }} from {{ log.created_at }}</h1>
+    <pre>
+        {{ log.result }}
+    </pre>
+{% endblock %}

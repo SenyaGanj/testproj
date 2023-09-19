@@ -19,20 +19,20 @@ class Migration(migrations.Migration):
             name='File',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('file', models.FileField(upload_to='', validators=[django.core.validators.FileExtensionValidator(allowed_extensions=['py'])], verbose_name='Файл для проверки')),
-                ('created_by', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='files', to=settings.AUTH_USER_MODEL, verbose_name='Создал')),
+                ('file', models.FileField(upload_to='', validators=[django.core.validators.FileExtensionValidator(allowed_extensions=['py'])], verbose_name='File')),
+                ('created_by', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='files', to=settings.AUTH_USER_MODEL, verbose_name='Created by')),
             ],
         ),
         migrations.CreateModel(
             name='Log',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created', models.DateTimeField(auto_now_add=True, verbose_name='Создан')),
-                ('updated', models.DateTimeField(auto_now=True, verbose_name='Обновлен')),
-                ('status', models.CharField(choices=[('new', 'new'), ('processing', 'processing'), ('ok', 'ok'), ('failed', 'failed'), ('done', 'done')], default='new', max_length=20, verbose_name='Статус')),
-                ('result', models.TextField(blank=True, verbose_name='Отчёт проверки')),
-                ('is_sent_to_email', models.BooleanField(verbose_name='Отправлено на почту')),
-                ('file', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='logs', to='fileman.file', verbose_name='Логи')),
+                ('created', models.DateTimeField(auto_now_add=True, verbose_name='Created at')),
+                ('updated', models.DateTimeField(auto_now=True, verbose_name='Updated at')),
+                ('status', models.CharField(choices=[('new', 'new'), ('processing', 'processing'), ('done', 'done')], default='new', max_length=20, verbose_name='Status')),
+                ('result', models.TextField(blank=True, verbose_name='Report')),
+                ('is_sent_to_email', models.BooleanField(verbose_name='Sent to mail')),
+                ('file', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='logs', to='fileman.file', verbose_name='Logs')),
             ],
         ),
     ]

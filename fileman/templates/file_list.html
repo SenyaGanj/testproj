@@ -2,24 +2,28 @@
 {% block title %}Create an account{% endblock %}
 
 {% block content %}
-    <h1>Список файлов</h1>
+    <h1>File list</h1>
     <table class="table">
         <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Имя файла</th>
-                <th scope="col">Последний статус</th>
+                <th scope="col">File name</th>
+                <th scope="col">Last status</th>
             </tr>
         </thead>
         <tbody>
             {% for file in file_list %}
                 <tr>
                     <th scope="row">{{ file.id }}</th>
-                    <td><a href="{% url 'edit_file' file.id %}">{{ file.file.name }}</a></td>
-                    <td>{{ file.last_log }}</td>
+                    <td><a href="{% url 'file_detail' file.id %}">{{ file.file.name }}</a></td>
+                    <td>
+                        {% if file.last_log %}
+                            {{ file.last_log }}
+                        {% endif %}
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
-    <a href="{% url 'create_file' %}">Добавить файл</a>
+    <a href="{% url 'create_file' %}">Upload file</a>
 {% endblock %}

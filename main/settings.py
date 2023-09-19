@@ -34,11 +34,6 @@ ALLOWED_HOSTS = get_option(
     list_of_strings
 )
 
-
-CSRF_COOKIE_SAMESITE = get_option('common', 'CSRF_COOKIE_SAMESITE', 'Strict')
-SESSION_COOKIE_SAMESITE = get_option('common', 'SESSION_COOKIE_SAMESITE', 'Strict')
-CSRF_COOKIE_HTTPONLY = get_option('common', 'CSRF_COOKIE_HTTPONLY', True, string_as_bool)
-SESSION_COOKIE_HTTPONLY = get_option('common', 'SESSION_COOKIE_HTTPONLY', True, string_as_bool)
 CSRF_TRUSTED_ORIGINS = get_option(
     'common',
     'CSRF_TRUSTED_ORIGINS',
@@ -46,12 +41,6 @@ CSRF_TRUSTED_ORIGINS = get_option(
     list_of_strings
 )
 
-CSRF_COOKIE_SECURE = get_option('common', 'CSRF_COOKIE_SECURE', True, string_as_bool)
-SESSION_COOKIE_SECURE = get_option('common', 'SESSION_COOKIE_SECURE', True, string_as_bool)
-
-SESSION_COOKIE_DOMAIN = get_option('common', 'SESSION_COOKIE_DOMAIN', None)
-
-CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = get_option('common', 'CORS_ORIGIN_WHITELIST', '', list_of_strings)
 CORS_EXPOSE_HEADERS = ('Content-Type', 'X-CSRFToken')
 
@@ -76,6 +65,7 @@ INSTALLED_APPS += PROJECT_APPS
 THIRD_PARTY_APPS = (
     'corsheaders',
     'rest_framework',
+    'django_celery_beat',
 )
 
 INSTALLED_APPS += THIRD_PARTY_APPS
@@ -186,20 +176,19 @@ AUTH_USER_MODEL = 'accounts.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework.renderers.BrowsableAPIRenderer'
+        'rest_framework.renderers.BrowsableAPIRenderer',
+        'rest_framework.renderers.JSONRenderer',
     ),
     'DEFAULT_PARSER_CLASSES': (
         'rest_framework.parsers.FormParser',
-        'rest_framework.parsers.MultiPartParser'
+        'rest_framework.parsers.MultiPartParser',
+        'rest_framework.parsers.JSONParser',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
-    ),
-    'DEFAULT_FILTER_BACKENDS': (
-        'django_filters.rest_framework.DjangoFilterBackend',
     ),
 }
 
@@ -223,12 +212,12 @@ CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers.DatabaseScheduler'
 CELERY_TASK_IGNORE_RESULT = True
 CELERYD_TIME_LIMIT = 50
 CELERY_BEAT_SCHEDULE = {
-    'clean_up_node_tasks': {
-        'task': 'nodes.tasks.clean_up_node_tasks',
-        'schedule': timedelta(seconds=10),
+    'check_new_files': {
+        'task': 'fileman.tasks.check_new_files',
+        'schedule': timedelta(seconds=20),
     },
 }
 
-CELERY_BROKER_URL = get_option('celery', 'BROKER_URL', 'redis://localhost:6379/0')
+CELERY_BROKER_URL = get_option('celery', 'BROKER_URL', 'redis://redis:6379/0')
 CELERY_TASK_SOFT_TIME_LIMIT = get_option('celery', 'TASK_SOFT_TIME_LIMIT', 60, int)
 CELERY_TASK_TIME_LIMIT = get_option('celery', 'TASK_SOFT_TIME_LIMIT', 90, int)
