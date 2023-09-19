@@ -8,5 +8,5 @@ class UpdateFileForm(forms.ModelForm):
         model = File
         fields = ('file',)
         widgets = {
-            'file': forms.FileInput(attrs={'class': 'form-control'})
+            'file': forms.FileInput(attrs={'class': 'form-control', 'required': True})
         }

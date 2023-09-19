@@ -16,5 +16,3 @@ RUN python3.9 -m pip install pip --upgrade \
 COPY . .
 
 EXPOSE 8000
-
-CMD ["pipenv", "run", "gunicorn", "-w", "2", "-b", "0.0.0.0:8000", "main.wsgi:application"]

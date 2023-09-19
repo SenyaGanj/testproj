@@ -1,0 +1,79 @@
+version: "3.9"
+
+services:
+  nginx:
+    container_name: projtest_nginx
+    restart: always
+    image: nginx:1.23-alpine
+    ports:
+      - 80:80
+    volumes:
+      - ./docker/stage/nginx.conf:/etc/nginx/conf.d/default.conf
+      - static_volume:/opt/testproj/static
+      - media_volume:/opt/testproj/media
+
+  psql:
+    image: postgres:15.3
+    container_name: projtest_psql
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - 5432:5432
+    env_file:
+      - .env
+
+  django:
+    container_name: projtest_django
+    build:
+      context: .
+      dockerfile: ./docker/stage/Dockerfile
+    env_file:
+      - .env
+    command: pipenv run gunicorn -w 2 -b 0.0.0.0:8000 main.wsgi:application
+    volumes:
+      - static_volume:/opt/testproj/static
+      - media_volume:/opt/testproj/media
+    ports:
+      - 8000:8000
+    depends_on:
+      - psql
+  redis:
+    container_name: projtest_redis
+    restart: unless-stopped
+    image: redis:7.0.5-alpine
+    expose:
+      - 6379:6379
+  worker:
+    container_name: projtest_worker
+    build:
+      context: .
+      dockerfile: ./docker/stage/Dockerfile
+    env_file:
+      - .env
+    command: pipenv run celery -A main worker -l DEBUG
+    volumes:
+      - static_volume:/opt/testproj/static
+      - media_volume:/opt/testproj/media
+    depends_on:
+      - psql
+      - redis
+  beat:
+    container_name: projtest_beat
+    build:
+      context: .
+      dockerfile: ./docker/stage/Dockerfile
+    env_file:
+      - .env
+    command: pipenv run celery -A main beat -l DEBUG
+    volumes:
+      - static_volume:/opt/testproj/static
+      - media_volume:/opt/testproj/media
+    depends_on:
+      - psql
+      - redis
+
+volumes:
+    static_volume: {}
+    media_volume: {}
+    postgres_data: {}

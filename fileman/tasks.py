@@ -34,7 +34,7 @@ def check_new_file(log_pk: int):
 
 
 @app.task
-def send_report_mail(self, log_pk: int, email_to: str, result: str):
+def send_report_mail(log_pk: int, email_to: str, result: str):
     log = Log.objects.select_related('file').get(pk=log_pk)
 
     try:

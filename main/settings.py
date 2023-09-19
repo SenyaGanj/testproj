@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = get_option('common', 'SECRET_KEY', 'secret')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True # get_option('common', 'DEBUG', True, string_as_bool)
+DEBUG = get_option('common', 'DEBUG', True, string_as_bool)
 
 ALLOWED_HOSTS = get_option(
     'common',
@@ -159,7 +159,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
 STATIC_ROOT = get_option('common', 'static_root', BASE_DIR / 'static')
 STATIC_URL = get_option('common', 'static_url', '/backend_static/')
 
