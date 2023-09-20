@@ -23,7 +23,7 @@ def check_new_files():
         check_new_file.delay(log_pk)
 
 
-@app.task(default_retry_delay=60)
+@app.task
 def check_new_file(log_pk: int):
     log = Log.objects.select_related('file', 'file__created_by').get(pk=log_pk)
 
