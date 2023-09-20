@@ -12,3 +12,15 @@
 api находится в fileman/api/...
 
 Отправку почты также не настраивал, просто вызываю метод send_mail, но вывел настройки для почтового сервера.
+
+Запуск:
+
+Прод:
+docker-compose build
+docker-compose up -d
+
+Дев:
+docker-compose -f ./docker-compose-dev.yml build
+docker-compose -f ./docker-compose-dev.yml up -d
+
+в файлах .env уже указала минимальные параметры для работы приложения
